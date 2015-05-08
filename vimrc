@@ -63,14 +63,15 @@ syntax on
 " 主题风格
 
 " 主题 solarized
-let g:solarized_termcolors=256
- set background=dark
-" set background=light
- colorscheme solarized
-
-""colorscheme molokai
-""let g:molokai_original = 1
-""let g:rehash256 = 1
+" if !has("gui_running")
+"     let g:solarized_termtrans=1
+"     let g:solarized_termcolors=256
+" endif
+" set background=dark
+" colorscheme solarized
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
 " 字体和大小
 set guifont=Monaco:h14
