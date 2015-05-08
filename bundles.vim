@@ -9,6 +9,7 @@ Plugin 'gmarik/vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
 Plugin 'bling/vim-airline'
+Plugin 'flazz/vim-colorschemes'
 " Plugin 'Lokaltog/vim-powerline'
 "按键
 Plugin 'ervandew/supertab'
@@ -27,4 +28,12 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'vim-scripts/AUtoClose'
 Plugin 'vim-scripts/cmdline-completion'
 "Plugin 'Valloric/YouCompleteMe'
+
+"
+Plugin  'godlygeek/csapprox'
+
+" Python 代码补全 
+Plugin 'davidhalter/jedi-vim' 
+
+
 call vundle#end()

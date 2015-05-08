@@ -1,4 +1,4 @@
-"
+
 "
 "
 "Vimrc setting
@@ -63,15 +63,15 @@ syntax on
 " 主题风格
 
 " 主题 solarized
-" let g:solarized_termcolors=256
-" "set background=dark
+ let g:solarized_termcolors=256
+ set background=dark
 " set background=light
-" colorscheme solarized
-" set t_Co=256
+ colorscheme solarized
+"" set t_Co=256
 
-colorscheme molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
+""colorscheme molokai
+""let g:molokai_original = 1
+""let g:rehash256 = 1
 
 " 字体和大小
 set guifont=Monaco:h14
@@ -303,3 +303,11 @@ endif
 autocmd vimenter * if !argc() | NERDTree | endif
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+"############jedi 置##################
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
