@@ -30,7 +30,8 @@ filetype plugin indent on
 
 " 文件修改以后自动载入
 set autoread
-
+" 自动保存
+set autowrite
 " 修改leader键
 let mapleader = ","
 let g:mapleader = ","
@@ -209,13 +210,12 @@ nnoremap k gk
 nnoremap gk k
 nnoremap j gj
 nnoremap gj j
-" " F1 - F6 设置
+
 " " F1 废弃这个键,防止调出系统帮助
 " " F2 行号开关，用于鼠标复制代码用
-" " F3 显示可打印字符开关
+" " F3 列出当前目录
 " " F4 换行开关
 " " F5 粘贴模式paste_mode开关,用于有格式的代码粘贴
-" " F6 语法开关，关闭语法可以加快大文件的展示
 " " I can type :help on my own, thanks. Protect your fat fingers from the
 nmap <F1> :w!<cr>
 ""为方便复制，用<F2>开启/关闭行号显示:
@@ -285,8 +285,9 @@ if isdirectory(expand("~/.vim/bundle/vim-airline/"))
     endif
 endif
 
-"############nerdtree##################
-    map <C-e> :NERDTreeToggle<CR>
+"############NERDtree设置##################
+    map <F3> :NERDTreeToggle<CR>
+    map <C-F3> \be
     map <leader>e :NERDTreeFind<CR>
     nmap <leader>nt :NERDTreeFind<CR>
     let NERDTreeShowBookmarks=1
@@ -297,3 +298,8 @@ endif
     let NERDTreeShowHidden=1
     let NERDTreeKeepTreeInNewTab=1
     let g:nerdtree_tabs_open_on_gui_startup=0
+
+"当打开vim且没有文件时自动打开NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif
+" 只剩 NERDTree时自动关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
