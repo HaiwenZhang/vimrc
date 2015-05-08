@@ -10,9 +10,10 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
 Plugin 'bling/vim-airline'
 Plugin 'flazz/vim-colorschemes'
-" Plugin 'Lokaltog/vim-powerline'
+
 "按键
 Plugin 'ervandew/supertab'
+Plugin 'Lokaltog/vim-easymotion'
 
 " 代码
 Plugin 'honza/vim-snippets'
@@ -25,15 +26,18 @@ Plugin 'magic-dot-files/TagHighlight'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'kien/ctrlp.vim'
-Plugin 'vim-scripts/AUtoClose'
-Plugin 'vim-scripts/cmdline-completion'
 "Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'tpope/vim-surround'
+Plugin 'godlygeek/tabular'
 
 "
 Plugin  'godlygeek/csapprox'
 
-" Python 代码补全 
+" Python 代码 
 Plugin 'davidhalter/jedi-vim' 
+Plugin 'klen/python-mode'
 
 
 call vundle#end()

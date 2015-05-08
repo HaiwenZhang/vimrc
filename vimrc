@@ -63,11 +63,10 @@ syntax on
 " 主题风格
 
 " 主题 solarized
- let g:solarized_termcolors=256
+let g:solarized_termcolors=256
  set background=dark
 " set background=light
  colorscheme solarized
-"" set t_Co=256
 
 ""colorscheme molokai
 ""let g:molokai_original = 1
@@ -211,14 +210,26 @@ nnoremap gk k
 nnoremap j gj
 nnoremap gj j
 
-" " F1 废弃这个键,防止调出系统帮助
-" " F2 行号开关，用于鼠标复制代码用
-" " F3 列出当前目录
-" " F4 换行开关
-" " F5 粘贴模式paste_mode开关,用于有格式的代码粘贴
-" " I can type :help on my own, thanks. Protect your fat fingers from the
-nmap <F1> :w!<cr>
-""为方便复制，用<F2>开启/关闭行号显示:
+" F1 列出当前目录
+" F2 列出TlistToggle
+" F3 列出TarbarToggle
+" F4 行号开关，用于鼠标复制代码用
+" C，C++ 按F5编译运行
+" F6 C,C++的调试
+" F7 粘贴模式paste_mode开关,用于有格式的代码粘贴
+" F8 换行开关
+
+"F1 列出当前目录
+map <F1> :NERDTreeToggle<CR>
+
+" F2 列出TlistToggle
+map <silent> <F2> :TlistToggle<CR>
+
+" F3 列出TarbarToggle
+nmap <silent> <F3> :TagbarToggle<CR>
+
+" F4 行号开关，用于鼠标复制代码用
+nnoremap <F4> :call HideNumber()<CR>
 function! HideNumber()
     if(&relativenumber == &number)
         set relativenumber! number!
@@ -229,14 +240,68 @@ function! HideNumber()
     endif
         set number?
     endfunc
-nnoremap <F2> :call HideNumber()<CR>
-nnoremap <F4> :set wrap! wrap?<CR>
-"set paste
-set pastetoggle=<F5> " when in insert mode, press <F5> to go to
+
+"C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w"
+    if &filetype == 'c'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'java' 
+        exec "!javac %" 
+        exec "!time java %<"
+    elseif &filetype == 'sh'
+        :!time bash %
+    elseif &filetype == 'python'
+        exec "!time python2.7 %"
+    elseif &filetype == 'html'
+        exec "!firefox % &"
+    elseif &filetype == 'go'
+"        exec "!go build %<"
+        exec "!time go run %"
+    elseif &filetype == 'mkd'
+        exec "!~/.vim/markdown.pl % > %.html &"
+        exec "!firefox %.html &"
+    endif
+endfunc
+
+"C,C++的调试
+map <F6> :call Rungdb()<CR>
+func! Rungdb()
+    exec "w"
+    exec "!g++ % -g -o %<"
+    exec "!gdb ./%<"
+endfunc
+
+" set paste
+set pastetoggle=<F7> " when in insert mode, press <F5> to go to
 " paste mode, where you can paste mass data
 " that won't be autoindented
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
+
+nnoremap <F8> :set wrap! wrap?<CR>
+
+
+" easier moving between tabs
+map <Leader>n <esc>:tabprevious<CR>
+map <Leader>m <esc>:tabnext<CR>
+
+
+" map sort function to a key
+vnoremap <Leader>s :sort<CR>
+
+
+" easier moving of code blocks
+" Try to go into visual mode (v), thenselect several lines of code here and
+" then press ``>`` several times.
+vnoremap < <gv  " better indentation
+vnoremap > >gv  " better indentation
+
 
 " normal模式下切换到确切的tab
 noremap <leader>1 1gt
@@ -254,6 +319,7 @@ noremap <leader>0 :tablast<cr>
 "==========================================
 "      FileType Settings 文件类型设置
 "==========================================
+"
 "" Python 文件的一般设置，比如不要 tab 等
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -263,7 +329,60 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
+"==========================================
+"      新建文件
+"==========================================
 
+"新建.c,.h,.sh,.java文件，自动插入文件头 
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
+""定义函数SetTitle，自动插入文件头 
+func SetTitle() 
+    "如果文件类型为.sh文件 
+    if &filetype == 'sh' 
+        call setline(1,"\#!/bin/bash") 
+        call append(line("."), "") 
+    elseif &filetype == 'python'
+        call setline(1,"#!/usr/bin/env python")
+        call append(line("."),"# coding=utf-8")
+        call append(line(".")+1, "") 
+
+    elseif &filetype == 'ruby'
+        call setline(1,"#!/usr/bin/env ruby")
+        call append(line("."),"# encoding: utf-8")
+        call append(line(".")+1, "")
+
+"    elseif &filetype == 'mkd'
+"        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+    else 
+        call setline(1, "/*************************************************************************") 
+        call append(line("."), "    > File Name: ".expand("%")) 
+        call append(line(".")+1, "  > Author: ") 
+        call append(line(".")+2, "  > Mail: ") 
+        call append(line(".")+3, "  > Created Time: ".strftime("%c")) 
+        call append(line(".")+4, " ************************************************************************/") 
+        call append(line(".")+5, "")
+    endif
+    if expand("%:e") == 'cpp'
+        call append(line(".")+6, "#include<iostream>")
+        call append(line(".")+7, "using namespace std;")
+        call append(line(".")+8, "")
+    endif
+    if &filetype == 'c'
+        call append(line(".")+6, "#include<stdio.h>")
+        call append(line(".")+7, "")
+    endif
+    if expand("%:e") == 'h'
+        call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
+        call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+        call append(line(".")+8, "#endif")
+    endif
+    if &filetype == 'java'
+        call append(line(".")+6,"public class ".expand("%:r"))
+        call append(line(".")+7,"")
+    endif
+    "新建文件后，自动定位到文件末尾
+endfunc 
+autocmd BufNewFile * normal G
 
 
 "==========================================
@@ -286,8 +405,6 @@ if isdirectory(expand("~/.vim/bundle/vim-airline/"))
 endif
 
 "############NERDtree设置##################
-    map <F3> :NERDTreeToggle<CR>
-    map <C-F3> \be
     map <leader>e :NERDTreeFind<CR>
     nmap <leader>nt :NERDTreeFind<CR>
     let NERDTreeShowBookmarks=1
@@ -304,10 +421,23 @@ autocmd vimenter * if !argc() | NERDTree | endif
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-"############jedi 置##################
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
+"############jedi 设置##################
+let g:jedi#usages_command = "<leader>z"
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+
+set completeopt=longest,menuone
+function! OmniPopup(action)
+    if pumvisible()
+        if a:action == 'j'
+            return "\<C-N>"
+        elseif a:action == 'k'
+            return "\<C-P>"
+        endif
+    endif
+    return a:action
+endfunction
+
+inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
