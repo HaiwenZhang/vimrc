@@ -218,7 +218,7 @@ nnoremap gj j
 " C，C++ 按F5编译运行
 " F6 C,C++的调试
 " F7 粘贴模式paste_mode开关,用于有格式的代码粘贴
-" F8 换行开关
+" F8 打开BufExplorer
 
 "F1 列出当前目录
 map <F1> :NERDTreeToggle<CR>
@@ -288,6 +288,7 @@ au InsertLeave * set nopaste
 " easier moving between tabs
 " map <Leader>n <esc>:tabprevious<CR>
 " map <Leader>m <esc>:tabnext<CR>
+map <F8> :BufExplorer<CR>
 
 
 " map sort function to a key
@@ -573,3 +574,38 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+"########dyng/ctrlsf.vim设置#############
+" In CtrlSF window:
+" 回车/o, 打开
+" t       在tab中打开(建议)
+" T - Lkie t but focus CtrlSF window instead of opened new tab.
+" q - Quit CtrlSF window.
+nmap \ <Plug>CtrlSFCwordPath<CR>
+" let g:ctrlsf_position = 'below'
+" let g:ctrlsf_winsize = '30%'
+let g:ctrlsf_auto_close = 0
+
+"########terryma/vim-multiple-cursor设置#############
+" 多光标选中编辑
+let g:multi_cursor_use_default_mapping=0
+" Default mapping
+let g:multi_cursor_next_key='<C-m>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+
+"########terryma/vim-expand-region设置#############
+" map + <Plug>(expand_region_expand)
+" map _ <Plug>(expand_region_shrink)
+vmap v <Plug>(expand_region_expand)
+vmap V <Plug>(expand_region_shrink)
+
+"########szw/vim-ctrlspace设置#############
+let g:ctrlspace_default_mapping_key="<C-space>"
+let g:airline_exclude_preview = 1
+hi CtrlSpaceSelected guifg=#586e75 guibg=#eee8d5 guisp=#839496 gui=reverse,bold ctermfg=10 ctermbg=7 cterm=reverse,bold
+hi CtrlSpaceNormal   guifg=#839496 guibg=#021B25 guisp=#839496 gui=NONE ctermfg=12 ctermbg=0 cterm=NONE
+hi CtrlSpaceSearch   guifg=#cb4b16 guibg=NONE gui=bold ctermfg=9 ctermbg=NONE term=bold cterm=bold
+hi CtrlSpaceStatus   guifg=#839496 guibg=#002b36 gui=reverse term=reverse cterm=reverse ctermfg=12 ctermbg=8
+
