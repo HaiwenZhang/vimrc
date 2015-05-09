@@ -285,12 +285,9 @@ set pastetoggle=<F7> " when in insert mode, press <F5> to go to
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
 
-nnoremap <F8> :set wrap! wrap?<CR>
-
-
 " easier moving between tabs
-map <Leader>n <esc>:tabprevious<CR>
-map <Leader>m <esc>:tabnext<CR>
+" map <Leader>n <esc>:tabprevious<CR>
+" map <Leader>m <esc>:tabnext<CR>
 
 
 " map sort function to a key
@@ -406,39 +403,173 @@ if isdirectory(expand("~/.vim/bundle/vim-airline/"))
 endif
 
 "############NERDtree设置##################
-    map <leader>e :NERDTreeFind<CR>
-    nmap <leader>nt :NERDTreeFind<CR>
-    let NERDTreeShowBookmarks=1
-    let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-    let NERDTreeChDirMode=0
-    let NERDTreeQuitOnOpen=1
-    let NERDTreeMouseMode=2
-    let NERDTreeShowHidden=1
-    let NERDTreeKeepTreeInNewTab=1
-    let g:nerdtree_tabs_open_on_gui_startup=0
+map <leader>e :NERDTreeFind<CR>
+nmap <leader>nt :NERDTreeFind<CR>
+let NERDTreeShowBookmarks=1
+let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+let NERDTreeChDirMode=0
+let NERDTreeQuitOnOpen=1
+let NERDTreeMouseMode=2
+let NERDTreeShowHidden=1
+let NERDTreeKeepTreeInNewTab=1
+let g:nerdtree_tabs_open_on_gui_startup=0
 
 "当打开vim且没有文件时自动打开NERDTree
 autocmd vimenter * if !argc() | NERDTree | endif
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-"############jedi 设置##################
-let g:jedi#usages_command = "<leader>z"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
-set completeopt=longest,menuone
-function! OmniPopup(action)
+"############jistr/vim-nerdtree-tab##################
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+" 关闭同步
+let g:nerdtree_tabs_synchronize_view=0
+let g:nerdtree_tabs_synchronize_focus=0
+" 自动开启nerdtree
+"let g:nerdtree_tabs_open_on_console_startup=1
+
+
+"###############################################
+"                 代码自动补全
+"###############################################
+
+"#############YouCompleteMe设置#################
+
+"youcompleteme  默认tab  s-tab 和自动补全冲突
+"let g:ycm_key_list_select_completion=['<c-n>']
+let g:ycm_key_list_select_completion = ['<Down>']
+"let g:ycm_key_list_previous_completion=['<c-p>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+"let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+
+" 跳转到定义处, 分屏打开
+let g:ycm_goto_buffer_command = 'horizontal-split'
+" nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+
+" 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+endif
+
+" 直接触发自动补全 insert模式下
+" let g:ycm_key_invoke_completion = '<C-Space>'
+" 黑名单,不启用
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar' : 1,
+      \ 'gitcommit' : 1,
+      \}
+
+
+"#############ultisnips/snippets设置#################
+let g:UltiSnipsExpandTrigger       = "<tab>"
+let g:UltiSnipsJumpForwardTrigger  = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsSnippetDirectories  = ['UltiSnips']
+let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+" 定义存放代码片段的文件夹 .vim/UltiSnips下，使用自定义和默认的，将会的到全局，有冲突的会提示
+" 进入对应filetype的snippets进行编辑
+map <leader>us :UltiSnipsEdit<CR>
+
+" ctrl+j/k 进行选择
+func! g:JInYCM()
     if pumvisible()
-        if a:action == 'j'
-            return "\<C-N>"
-        elseif a:action == 'k'
-            return "\<C-P>"
-        endif
+        return "\<C-n>"
+    else
+        return "\<c-j>"
     endif
-    return a:action
 endfunction
 
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+func! g:KInYCM()
+    if pumvisible()
+        return "\<C-p>"
+    else
+        return "\<c-k>"
+    endif
+endfunction
+inoremap <c-j> <c-r>=g:JInYCM()<cr>
+au BufEnter,BufRead * exec "inoremap <silent> " . g:UltiSnipsJumpBackwordTrigger . " <C-R>=g:KInYCM()<cr>"
+let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
+
+
+"#############Raimondi/delimitMate设置#################
+"" for python docstring ",优化输入
+au FileType python let b:delimitMate_nesting_quotes = ['"']
+" 关闭某些类型文件的自动补全
+"au FileType mail let b:delimitMate_autoclose = 0
+
+
+"#############docunext/closetag.vim设置#################
+" 自动补全html/xml标签
+let g:closetag_html_style=1
+
+"#############scrooloose/syntasticvim设置#################
+" 多语言语法检查
+let g:syntastic_error_symbol='>>'
+let g:syntastic_warning_symbol='>'
+let g:syntastic_check_on_open=1
+let g:syntastic_check_on_wq=0
+let g:syntastic_enable_highlighting=1
+let g:syntastic_python_checkers=['pyflakes', 'pep8'] " 使用pyflakes,速度比pylint快
+" error code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
+let g:syntastic_python_pep8_args='--ignore=E501,E225'
+let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+let g:syntastic_html_checkers=['tidy', 'jshint']
+" 修改高亮的背景色, 适应主题
+highlight SyntasticErrorSign guifg=white guibg=black
+
+" to see error location list
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_loc_list_height = 5
+
+function! ToggleErrors()
+    let old_last_winnr = winnr('$')
+    lclose
+    if old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+    endif
+endfunction
+nnoremap <Leader>s :call ToggleErrors()<cr>
+" nnoremap <Leader>sn :lnext<cr>
+" nnoremap <Leader>sp :lprevious<cr>
+
+"#############hdima/python-syntax设置#################
+let g:pyflakes_use_quickfix = 0
+
+"########kien/rainbow_parentheses.vim设置#############
+" 括号显示增强
+" 不加入这行, 防止黑色括号出现, 很难识别
+" \ ['black',       'SeaGreen3'],
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
