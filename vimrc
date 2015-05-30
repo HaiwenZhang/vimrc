@@ -61,17 +61,18 @@ syntax enable
 syntax on
 
 " 主题风格
-
-" 主题 solarized
-" if !has("gui_running")
-"     let g:solarized_termtrans=1
-"     let g:solarized_termcolors=256
-" endif
 " set background=dark
+" let g:solarized_termtrans=1
+" let g:solarized_termcolors=256
+" let g:solarized_contrast="high"
+" let g:solarized_visibility="high"
 " colorscheme solarized
-colorscheme molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
+" colorscheme molokai
+" let g:molokai_original = 1
+" let g:rehash256 = 1
+" highlight NonText guibg=#060606
+" highlight Folded  guibg=#0A0A0A guifg=#9090D0
+colorscheme vividchalk
 
 " 字体和大小
 set guifont=Monaco:h14
@@ -124,7 +125,6 @@ set foldlevel=99
 " 缩进配置
 set smartindent " Smart indent
 set autoindent " 打开自动缩进
-" never add copyindent, case error " copy the previous indentation on autoindenting
 
 " tab相关变更
 set tabstop=4 " 设置Tab键的宽度 [等同的空格个数]
@@ -146,8 +146,7 @@ set ttyfast
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-
+" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
 
 "==========================================
 "" FileEncode Settings 文件编码,格式
@@ -180,19 +179,16 @@ set guioptions-=R
 set guioptions-=m
 set guioptions-=T
 
-
 "==========================================
 ""         others 其它设置
 "==========================================
-"autocmd! bufwritepost _vimrc source % " vimrc文件修改之后自动加载。 windows。
 autocmd! bufwritepost .vimrc source % " vimrc文件修改之后自动加载。 linux。
+
 "" 自动补全配置
 "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 set completeopt=longest,menu
 "" 增强模式中的命令行自动完成操作
 set wildmenu
-" Ignore compiled files
-" set wildignore=*.o,*~,*.pyc,*.class
 
 
 "==========================================
@@ -200,10 +196,10 @@ set wildmenu
 "==========================================
 "" 主要按键重定义
 " 关闭方向键, 强迫自己用 hjkl
-map <Left> <Nop>
-map <Right> <Nop>
-map <Up> <Nop>
-map <Down> <Nop>
+"map <Left> <Nop>
+"map <Right> <Nop>
+"map <Up> <Nop>
+"map <Down> <Nop>
 "Treat long lines as break lines (useful when moving around in them)
 "se swap之后，同物理行上线直接跳
 nnoremap k gk
@@ -211,7 +207,7 @@ nnoremap gk k
 nnoremap j gj
 nnoremap gj j
 
-" F1 列出当前目录
+" 
 " F2 列出TlistToggle
 " F3 列出TarbarToggle
 " F4 行号开关，用于鼠标复制代码用
@@ -220,14 +216,13 @@ nnoremap gj j
 " F7 粘贴模式paste_mode开关,用于有格式的代码粘贴
 " F8 打开BufExplorer
 
-"F1 列出当前目录
-map <F1> :NERDTreeToggle<CR>
-
+"F1 废弃这个键,防止调出系统帮助 
+noremap <F1> <Esc>
 " F2 列出TlistToggle
-map <silent> <F2> :TlistToggle<CR>
+"map <silent> <F2> :TlistToggle<CR>
 
 " F3 列出TarbarToggle
-nmap <silent> <F3> :TagbarToggle<CR>
+"nmap <silent> <F3> :TagbarToggle<CR>
 
 " F4 行号开关，用于鼠标复制代码用
 nnoremap <F4> :call HideNumber()<CR>
@@ -258,7 +253,7 @@ func! CompileRunGcc()
     elseif &filetype == 'sh'
         :!time bash %
     elseif &filetype == 'python'
-        exec "!time python2.7 %"
+        exec "!time python %"
     elseif &filetype == 'html'
         exec "!firefox % &"
     elseif &filetype == 'go'
@@ -294,6 +289,11 @@ map <F8> :BufExplorer<CR>
 " map sort function to a key
 vnoremap <Leader>s :sort<CR>
 
+"Smart way to move between windows 分屏窗口移动
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " easier moving of code blocks
 " Try to go into visual mode (v), thenselect several lines of code here and
@@ -333,55 +333,53 @@ autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,pe
 "==========================================
 
 "新建.c,.h,.sh,.java文件，自动插入文件头 
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
+"autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call Settitle()" 
 ""定义函数SetTitle，自动插入文件头 
-func SetTitle() 
+"func Settitle()
     "如果文件类型为.sh文件 
-    if &filetype == 'sh' 
-        call setline(1,"\#!/bin/bash") 
-        call append(line("."), "") 
-    elseif &filetype == 'python'
-        call setline(1,"#!/usr/bin/env python")
-        call append(line("."),"# coding=utf-8")
-        call append(line(".")+1, "") 
+"    if &filetype == 'sh' 
+"        call setline(1,"\#!/bin/bash") 
+"        call append(line("."), "") 
+"    endif
 
-    elseif &filetype == 'ruby'
-        call setline(1,"#!/usr/bin/env ruby")
-        call append(line("."),"# encoding: utf-8")
-        call append(line(".")+1, "")
+"    if &filetype == 'python'
+"        call setline(1,"#!/usr/bin/env python")
+"        call append(line("."), "__auther__ = 'haiwen'")
+"        call append(line("."), "# Created Time: ".strftime("%c")) 
+"        call append(line("."), "# -*- coding: utf-8 -*-")
+"        call append(line(".")+1, "") 
+"    endif
 
-"    elseif &filetype == 'mkd'
-"        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
-    else 
-        call setline(1, "/*************************************************************************") 
-        call append(line("."), "    > File Name: ".expand("%")) 
-        call append(line(".")+1, "  > Author: ") 
-        call append(line(".")+2, "  > Mail: ") 
-        call append(line(".")+3, "  > Created Time: ".strftime("%c")) 
-        call append(line(".")+4, " ************************************************************************/") 
-        call append(line(".")+5, "")
-    endif
-    if expand("%:e") == 'cpp'
-        call append(line(".")+6, "#include<iostream>")
-        call append(line(".")+7, "using namespace std;")
-        call append(line(".")+8, "")
-    endif
-    if &filetype == 'c'
-        call append(line(".")+6, "#include<stdio.h>")
-        call append(line(".")+7, "")
-    endif
-    if expand("%:e") == 'h'
-        call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
-        call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
-        call append(line(".")+8, "#endif")
-    endif
-    if &filetype == 'java'
-        call append(line(".")+6,"public class ".expand("%:r"))
-        call append(line(".")+7,"")
-    endif
-    "新建文件后，自动定位到文件末尾
-endfunc 
-autocmd BufNewFile * normal G
+"    if &filetype == 'ruby'
+"        call setline(1,"#!/usr/bin/env ruby")
+"        call append(line("."),"# encoding: utf-8")
+"        call append(line(".")+1, "")
+"    endif
+"
+"    if expand("%:e") == 'cpp'
+"        call append(line(".")+6, "#include<iostream>")
+"        call append(line(".")+7, "using namespace std;")
+"        call append(line(".")+8, "")
+"    endif
+
+"    if &filetype == 'c'
+"        call append(line(".")+6, "#include<stdio.h>")
+"        call append(line(".")+7, "")
+"    endif
+
+"    if expand("%:e") == 'h'
+"        call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
+"        call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+"        call append(line(".")+8, "#endif")
+"    endif
+
+"    if &filetype == 'java'
+"        call append(line(".")+6,"public class ".expand("%:r"))
+"        call append(line(".")+7,"")
+"    endif
+"endfunc 
+
+"autocmd BufNewFile * normal G
 
 
 "==========================================
@@ -404,6 +402,7 @@ if isdirectory(expand("~/.vim/bundle/vim-airline/"))
 endif
 
 "############NERDtree设置##################
+map <C-e> <plug>NERDTreeTabsToggle<CR>
 map <leader>e :NERDTreeFind<CR>
 nmap <leader>nt :NERDTreeFind<CR>
 let NERDTreeShowBookmarks=1
@@ -416,7 +415,7 @@ let NERDTreeKeepTreeInNewTab=1
 let g:nerdtree_tabs_open_on_gui_startup=0
 
 "当打开vim且没有文件时自动打开NERDTree
-autocmd vimenter * if !argc() | NERDTree | endif
+" autocmd vimenter * if !argc() | NERDTree | endif
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
@@ -437,32 +436,21 @@ let g:nerdtree_tabs_synchronize_focus=0
 "#############YouCompleteMe设置#################
 
 "youcompleteme  默认tab  s-tab 和自动补全冲突
-"let g:ycm_key_list_select_completion=['<c-n>']
-let g:ycm_key_list_select_completion = ['<Down>']
-"let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
+let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
 let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
 let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
 let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-let g:ycm_collect_identifiers_from_tags_files = 1
+"let g:ycm_collect_identifiers_from_tags_files = 1
 
-"let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
-
-" 跳转到定义处, 分屏打开
-let g:ycm_goto_buffer_command = 'horizontal-split'
-" nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
 
 " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
 if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
     let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
 endif
 
-" 直接触发自动补全 insert模式下
-" let g:ycm_key_invoke_completion = '<C-Space>'
-" 黑名单,不启用
 let g:ycm_filetype_blacklist = {
       \ 'tagbar' : 1,
       \ 'gitcommit' : 1,
@@ -470,13 +458,14 @@ let g:ycm_filetype_blacklist = {
 
 
 "#############ultisnips/snippets设置#################
-let g:UltiSnipsExpandTrigger       = "<tab>"
-let g:UltiSnipsJumpForwardTrigger  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-p>"
+let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file"
+"let g:UltiSnipsExpandTrigger       = "<tab>"
 let g:UltiSnipsSnippetDirectories  = ['UltiSnips']
-let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
-" 定义存放代码片段的文件夹 .vim/UltiSnips下，使用自定义和默认的，将会的到全局，有冲突的会提示
-" 进入对应filetype的snippets进行编辑
+let g:UltiSnipsEditSplit = "vertial"
+"let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
 map <leader>us :UltiSnipsEdit<CR>
 
 " ctrl+j/k 进行选择
@@ -496,8 +485,8 @@ func! g:KInYCM()
     endif
 endfunction
 inoremap <c-j> <c-r>=g:JInYCM()<cr>
-au BufEnter,BufRead * exec "inoremap <silent> " . g:UltiSnipsJumpBackwordTrigger . " <C-R>=g:KInYCM()<cr>"
-let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
+"au BufEnter,BufRead * exec "inoremap <silent> " . g:UltiSnipsJumpBackwordTrigger . " <C-R>=g:KInYCM()<cr>"
+"let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
 
 
 "#############Raimondi/delimitMate设置#################
@@ -519,7 +508,6 @@ let g:syntastic_check_on_open=1
 let g:syntastic_check_on_wq=0
 let g:syntastic_enable_highlighting=1
 let g:syntastic_python_checkers=['pyflakes', 'pep8'] " 使用pyflakes,速度比pylint快
-" error code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
 let g:syntastic_python_pep8_args='--ignore=E501,E225'
 let g:syntastic_javascript_checkers = ['jsl', 'jshint']
 let g:syntastic_html_checkers=['tidy', 'jshint']
@@ -575,17 +563,6 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
-"########dyng/ctrlsf.vim设置#############
-" In CtrlSF window:
-" 回车/o, 打开
-" t       在tab中打开(建议)
-" T - Lkie t but focus CtrlSF window instead of opened new tab.
-" q - Quit CtrlSF window.
-nmap \ <Plug>CtrlSFCwordPath<CR>
-" let g:ctrlsf_position = 'below'
-" let g:ctrlsf_winsize = '30%'
-let g:ctrlsf_auto_close = 0
-
 "########terryma/vim-multiple-cursor设置#############
 " 多光标选中编辑
 let g:multi_cursor_use_default_mapping=0
@@ -601,11 +578,17 @@ let g:multi_cursor_quit_key='<Esc>'
 vmap v <Plug>(expand_region_expand)
 vmap V <Plug>(expand_region_shrink)
 
-"########szw/vim-ctrlspace设置#############
-let g:ctrlspace_default_mapping_key="<C-space>"
-let g:airline_exclude_preview = 1
-hi CtrlSpaceSelected guifg=#586e75 guibg=#eee8d5 guisp=#839496 gui=reverse,bold ctermfg=10 ctermbg=7 cterm=reverse,bold
-hi CtrlSpaceNormal   guifg=#839496 guibg=#021B25 guisp=#839496 gui=NONE ctermfg=12 ctermbg=0 cterm=NONE
-hi CtrlSpaceSearch   guifg=#cb4b16 guibg=NONE gui=bold ctermfg=9 ctermbg=NONE term=bold cterm=bold
-hi CtrlSpaceStatus   guifg=#839496 guibg=#002b36 gui=reverse term=reverse cterm=reverse ctermfg=12 ctermbg=8
+"########vim-surroun设置#############
+let b:surround_{char2nr("v")} = "{{ \r }}"
+let b:surround_{char2nr("{")} = "{{ \r }}"
+let b:surround_{char2nr("%")} = "{% \r %}"
+let b:surround_{char2nr("b")} = "{% block \1block name: \1 %}\r{% endblock \1\1 %}"
+let b:surround_{char2nr("i")} = "{% if \1condition: \1 %}\r{% endif %}"
+let b:surround_{char2nr("w")} = "{% with \1with: \1 %}\r{% endwith %}"
+let b:surround_{char2nr("f")} = "{% for \1for loop: \1 %}\r{% endfor %}"
+let b:surround_{char2nr("c")} = "{% comment %}\r{% endcomment %}"
 
+"########CommandT 设置#############
+" noremap <leader>o <Esc>:CommandT<CR>
+" noremap <leader>O <Esc>:CommandTFlush<CR>
+" noremap <leader>b <Esc>:CommandTBuffer<CR>

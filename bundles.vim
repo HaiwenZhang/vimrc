@@ -16,6 +16,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
 Plugin  'godlygeek/csapprox'
+Plugin 'tpope/vim-vividchalk'
 "状态栏增强
 Plugin 'bling/vim-airline'
 " 多语言语法检查
@@ -33,7 +34,7 @@ Plugin 'Raimondi/delimitMate'
 " html/xml标签配对补全
 Plugin 'docunext/closetag.vim'
 " 快速注释
-Plugin 'scrooloose/nerdcommenter'
+"Plugin 'scrooloose/nerdcommenter'
 "  赋值语句代码对齐
 Plugin 'godlygeek/tabular'
 " 位置跳转
@@ -65,9 +66,12 @@ Plugin 'hdima/python-syntax'
 Plugin 'kevinw/pyflakes-vim'
 " 函数名和自定义数据结构高亮
 Plugin 'magic-dot-files/TagHighlight'
+"快速编写html文件 
+Plugin 'rstacruz/sparkup'
+"快速注释
+Plugin 'tomtom/tcomment_vim'
 
-
-
+"Plugin 'wincent/command-t'
 
 
 
