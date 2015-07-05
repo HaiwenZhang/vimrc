@@ -55,7 +55,7 @@ noremap <silent> <Space> :silent noh<CR>
 " => 颜色,字体,主题设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 语法高亮
-syntax enable  
+syntax enable
 syntax on
 
 " 主题风格
@@ -143,9 +143,6 @@ set ttyfast
 " Always show the status line
 set laststatus=2
 
-" Format the status line
-" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-
 "==========================================
 "" FileEncode Settings 文件编码,格式
 "==========================================
@@ -205,7 +202,7 @@ nnoremap gk k
 nnoremap j gj
 nnoremap gj j
 
-" 
+"
 " F2 列出TlistToggle
 " F3 列出TarbarToggle
 " F4 行号开关，用于鼠标复制代码用
@@ -214,7 +211,7 @@ nnoremap gj j
 " F7 粘贴模式paste_mode开关,用于有格式的代码粘贴
 " F8 打开BufExplorer
 
-"F1 废弃这个键,防止调出系统帮助 
+"F1 废弃这个键,防止调出系统帮助
 noremap <F1> <Esc>
 " F2 列出TlistToggle
 "map <silent> <F2> :TlistToggle<CR>
@@ -223,7 +220,7 @@ noremap <F1> <Esc>
 "nmap <silent> <F3> :TagbarToggle<CR>
 
 " F4 行号开关，用于鼠标复制代码用
-nnoremap <F4> :call HideNumber()<CR>
+nnoremap <F2> :call HideNumber()<CR>
 function! HideNumber()
     if(&relativenumber == &number)
         set relativenumber! number!
@@ -286,7 +283,15 @@ autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,pe
 "      新建文件
 "==========================================
 
+
+
+
+
+
 "==========================================
+"                插件设置
+"==========================================
+
 "############vim-airline##################
 if isdirectory(expand("~/.vim/bundle/vim-airline/"))
     if !exists('g:airline_theme')
@@ -327,59 +332,29 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 "#############YouCompleteMe设置#################
 
-"youcompleteme  默认tab  s-tab 和自动补全冲突
+""youcompleteme  默认tab  s-tab 和自动补全冲突
 let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
 let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+"let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
 let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-"let g:ycm_collect_identifiers_from_tags_files = 1
+"let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
 
-let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
-
-" 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
-if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
-    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
-endif
-
-let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'gitcommit' : 1,
-      \}
+let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+let g:ycm_error_symbol = '>!'
+let g:ycm_warning_symbol = '>*'
 
 
-"#############ultisnips/snippets设置#################
-let g:UltiSnipsExpandTrigger       = "<c-j>"
-let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-p>"
-let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file"
-"let g:UltiSnipsExpandTrigger       = "<tab>"
-let g:UltiSnipsSnippetDirectories  = ['UltiSnips']
-let g:UltiSnipsEditSplit = "vertial"
-"let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+"#############SirVer/ultisnips设置#################
+let g:UltiSnipsSnippetDirectories=['UltiSnips']
+let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+let g:UltiSnipsExpandTrigger = '<Tab>'
+let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 map <leader>us :UltiSnipsEdit<CR>
-
-" ctrl+j/k 进行选择
-func! g:JInYCM()
-    if pumvisible()
-        return "\<C-n>"
-    else
-        return "\<c-j>"
-    endif
-endfunction
-
-func! g:KInYCM()
-    if pumvisible()
-        return "\<C-p>"
-    else
-        return "\<c-k>"
-    endif
-endfunction
-inoremap <c-j> <c-r>=g:JInYCM()<cr>
-"au BufEnter,BufRead * exec "inoremap <silent> " . g:UltiSnipsJumpBackwordTrigger . " <C-R>=g:KInYCM()<cr>"
-"let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
-
 
 "#############docunext/closetag.vim设置#################
 " 自动补全html/xml标签

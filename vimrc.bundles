@@ -21,7 +21,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'bronson/vim-trailing-whitespace'
 " 代码自动补全
 Plugin 'Valloric/YouCompleteMe'
-"代码片段快速插入
+" 代码片段快速插入
 Plugin 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
