@@ -55,7 +55,7 @@ Plugin 'vim-scripts/taglist.vim'
 " Python 语法高亮
 Plugin 'hdima/python-syntax'
 " Python 语法检查
-Plugin 'kevinw/pyflakes-vim'
+" Plugin 'kevinw/pyflakes-vim'
 " 函数名和自定义数据结构高亮
 Plugin 'magic-dot-files/TagHighlight'
 "快速编写html文件 

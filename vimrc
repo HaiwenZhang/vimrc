@@ -65,15 +65,15 @@ syntax on
 " let g:solarized_contrast="high"
 " let g:solarized_visibility="high"
 " colorscheme solarized
-" colorscheme molokai
-" let g:molokai_original = 1
-" let g:rehash256 = 1
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 " highlight NonText guibg=#060606
 " highlight Folded  guibg=#0A0A0A guifg=#9090D0
-colorscheme vividchalk
+" colorscheme vividchalk
 
 " 字体和大小
-set guifont=Monaco:h14
+set guifont=Monaco:h15
 set guifontwide=Source\ Sans\ Pro:h14
 
 
@@ -214,10 +214,10 @@ nnoremap gj j
 "F1 废弃这个键,防止调出系统帮助
 noremap <F1> <Esc>
 " F2 列出TlistToggle
-"map <silent> <F2> :TlistToggle<CR>
+map <silent> <F2> :TlistToggle<CR
 
 " F3 列出TarbarToggle
-"nmap <silent> <F3> :TagbarToggle<CR>
+nmap <silent> <F3> :TagbarToggle<CR>
 
 " F4 行号开关，用于鼠标复制代码用
 nnoremap <F2> :call HideNumber()<CR>
@@ -239,6 +239,9 @@ set pastetoggle=<F7> " when in insert mode, press <F5> to go to
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
 
+" F8 打开BufExplorer
+
+nmap <silent> <F8> :BufExplorer<CR>
 
 "Smart way to move between windows 分屏窗口移动
 map <C-j> <C-W>j
