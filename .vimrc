@@ -61,57 +61,43 @@ highlight CursorLine cterm=NONE ctermbg=blue ctermfg=white
 "turn next file
 map <C-n> :bn<CR>
 
-"git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 " vundle 设置
+" git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set nocompatible               " be iMproved
 filetype off                   " required!
  
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
      
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
-  
-" My Bundles here:
-"
-" original repos on github
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-" vim-scripts repos
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-" non github repos
-Bundle 'ctrlp.vim'
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'L9'
+Plugin 'FuzzyFinder'
+Plugin 'ctrlp.vim'
+Plugin 'https://github.com/nathanaelkane/vim-indent-guides.git'
+Plugin 'https://github.com/Lokaltog/vim-powerline.git'
+Plugin 'The-NERD-tree'
+Plugin 'The-NERD-Commenter'
+Plugin 'jiangmiao/auto-pairs'
+
+Plugin 'NLKNguyen/papercolor-theme'
+
 " ...
-  
-filetype plugin indent on     " required!
-    "
-    " Brief help  -- \u6b64\u5904\u540e\u9762\u90fd\u662fvundle\u7684\u4f7f\u7528\u547d\u4ee4
-    " :BundleList          - list configured bundles
-    " :BundleInstall(!)    - install(update) bundles
-    " :BundleSearch(!) foo - search(or refresh cache first) for foo
-    " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-    "
-    " see :h vundle for more details or wiki for FAQ
-    " NOTE: comments after Bundle command are not allowed..
-    "=========================================================================
-
-
-" vim-powerline Download
-Bundle 'https://github.com/Lokaltog/vim-powerline.git'
-
-filetype plugin indent on
+call vundle#end()            " required
+filetype plugin indent on    " required
 "
 " vim-powerline setting
 set laststatus=2
-set t_Co=256
 let g:Powerline_symbols='unicode'
 set encoding=utf8
 
+set background=dark
+colorscheme PaperColor
+
 " nerd tree
-Bundle 'The-NERD-tree'
 nmap <leader>nt :NERDTree<cr>:set rnu<cr>
 map <F3> :NERDTreeMirror<CR>
 map <F3> :NERDTreeToggle<CR>
@@ -123,13 +109,9 @@ let NERDTreeShowLineNumbers=1
 let NERDTreeWinPos=1
 
 " nerd commenter
-Bundle 'The-NERD-Commenter'
-
 let NERDShutUp=1
 
 map <c-h> ,c<space>
-
-Bundle 'https://github.com/nathanaelkane/vim-indent-guides.git'
 
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_guide_size = 1 
