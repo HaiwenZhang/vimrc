@@ -14,11 +14,14 @@ set ruler
 "
 set showcmd
 
+set hidden
+
 "
 set history=1000
 
 "
 set nobackup
+set nowritebackup
 set noswapfile
 
 set cursorline
@@ -28,6 +31,12 @@ set showmatch
 
 set autoindent
 set cindent
+
+set cmdheight=2
+
+set updatetime=300
+
+set shortmess+=c
 
 syntax enable
 syntax on
@@ -61,33 +70,32 @@ highlight CursorLine cterm=NONE ctermbg=blue ctermfg=white
 "turn next file
 map <C-n> :bn<CR>
 
-" vundle 设置
-" git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set nocompatible               " be iMproved
 filetype off                   " required!
+
+
+"curl -fLo ~/.vim/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
  
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
      
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'L9'
-Plugin 'FuzzyFinder'
-Plugin 'ctrlp.vim'
-Plugin 'https://github.com/nathanaelkane/vim-indent-guides.git'
-Plugin 'https://github.com/Lokaltog/vim-powerline.git'
-Plugin 'The-NERD-tree'
-Plugin 'The-NERD-Commenter'
-Plugin 'jiangmiao/auto-pairs'
+" let vim plug manage, required
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-fugitive'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plug 'https://github.com/nathanaelkane/vim-indent-guides.git'
+Plug 'https://github.com/Lokaltog/vim-powerline.git'
+Plug 'jiangmiao/auto-pairs'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'kien/ctrlp.vim'
+Plug 'vim-scripts/FuzzyFinder'
+Plug 'vim-scripts/L9'
+Plug 'preservim/nerdtree'
+Plug 'preservim/nerdcommenter'
+Plug 'neoclide/coc.nvim'
+Plug 'mhinz/vim-startify'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
 
-Plugin 'NLKNguyen/papercolor-theme'
-
-" ...
-call vundle#end()            " required
-filetype plugin indent on    " required
 "
 " vim-powerline setting
 set laststatus=2
